@@ -18,13 +18,10 @@ async def main(tag:str,request:Request):
     if check is None:
         return templates.TemplateResponse(name='index1.html', context={'request': request, 'tag': tag})
     else:
-        if (check.status_order =='NEW'
-                or check.status_order =='UPDATED'):
+        if check.status_order =='NEW':
             return templates.TemplateResponse(name='index1.html', context={'request': request, 'tag': tag})
         else:
             return templates.TemplateResponse(name='status.html', context={'request': request, 'tag': tag})
-
-
 
 
 

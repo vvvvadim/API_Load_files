@@ -1,15 +1,14 @@
 from fastapi import HTTPException,status
-from sqlalchemy.dialects.mysql import insert
-from sqlalchemy import select, null,update, or_
+from sqlalchemy import select
 from sqlalchemy.orm import joinedload, selectinload
-
 from app.database.database import engine, Base, connection, Order, Media, OrderState
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Dict,List
+from app.config.shemas import OrderSCH
+from typing import List
 
 
 @connection
-async def get_order(session:AsyncSession,tag:str):
+async def get_order(session:AsyncSession,tag:str) -> OrderSCH:
     res = await session.execute(select(Order).where(Order.order_name == tag))
     res = res.scalar_one_or_none()
     return res
@@ -28,7 +27,7 @@ async def post_data(session:AsyncSession, tag:str, files:list):
         )
 
 @connection
-async def post_data_id(session:AsyncSession, id:int, files:list):
+async def post_data_id(session:AsyncSession, id:int, files:list) -> None:
     try:
         order = await session.execute(select(Order)
                                       .filter(Order.id == id)
@@ -49,10 +48,10 @@ async def post_data_id(session:AsyncSession, id:int, files:list):
 
 
 @connection
-async def get_orders(session:AsyncSession) :
+async def get_orders(session:AsyncSession) -> List[OrderSCH]:
     try:
         res = await session.execute(select(Order)
-                                    .filter(or_(Order.status_order == 'NEW' ,Order.status_order == 'UPDATED'))
+                                    .filter(Order.status_order == 'NEW' )
                                     .join(Media)
                                     .where(Media.status == 'NEW')
                                     .options(selectinload(Order.medias))
@@ -89,7 +88,10 @@ async def delete_data():
 
 
 @connection
-async def change_order_status(session:AsyncSession, tag : str, status_media:str = None, status_order: str = None):
+async def change_order_status(session:AsyncSession,
+                              tag : str,
+                              status_media:str = None,
+                              status_order: str = None) -> OrderSCH :
     order = await session.execute(select(Order)
                                   .filter(Order.order_name == tag)
                                   .options(joinedload(Order.medias))

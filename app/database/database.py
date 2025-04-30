@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine,AsyncAttrs, async_sessionmaker,AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase,declared_attr,relationship
 from datetime import datetime
-from sqlalchemy import Integer, func, String,ForeignKey, text
+from sqlalchemy import Integer, func,ForeignKey, text
 from typing import List
 import enum
 
