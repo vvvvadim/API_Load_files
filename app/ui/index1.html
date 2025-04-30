@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<style>
+          @import 'https://fonts.googleapis.com/css?family=Open+Sans+Condensed:600';
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+font-size: xx-large;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+div[class*=box] {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box-1 { background-color: #FF6766; }
+
+
+input[type="file"]::file-selector-button {
+  border: 150px solid #6c5ce7;
+  padding: 0.2em 0.4em;
+  border-radius: 0.2em;
+  font-size: xx-large;
+  background-color: #a29bfe;
+  transition: 1s;
+
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #81ecec;
+  border: 150px solid #00cec9;
+}
+
+input[type=submit] {
+  border: 143px solid #6c5ce7;
+  padding: 0.2em 0.4em;
+  border-radius: 0.2em;
+font-size: xx-large;
+  background-color: #a29bfe;
+
+}
+
+
+
+
+</style>
+
+ <head>
+  <link rel="icon" href="data:;base64,=">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <title>Загрузка файлов</title>
+ </head>
+ <body>
+ <div class="box-1">
+ <form action="/upload" enctype="multipart/form-data" method="post">
+             <input name="tag" type="hidden" value={{tag}} />
+            <p>Номер заказ-наряда: {{tag}} </p>
+  <label for="fileUpload">Выберите фотографии для загрузки</label>
+  <p><input type="file" id="fileUpload" name="files" multiple accept="image/*,image/jpeg"/></p>
+  <p><input type="submit" value="Отправить" ></p>
+</form>
+     </div>
+ </body>
+</html>

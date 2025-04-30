@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <link rel="icon" href="data:;base64,=">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <title>Загрузка файлов</title>
+ </head>
+ <body>
+<h2>ID: {{tag}} </h2>
+  <form action="/upload" enctype="multipart/form-data" method="post">
+       <p>
+        Tag: <br>
+        <input name="tag" type="text" value={{tag}} />
+       </p>
+   <p>Загрузите ваши фотографии на сервер</p>
+   <p><input type="file" name="files" multiple accept="image/*,image/jpeg">
+   <input type="submit" value="Отправить"></p>
+  </form>
+ </body>
+</html>
