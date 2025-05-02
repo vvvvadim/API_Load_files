@@ -5,6 +5,8 @@ from app.database.database import engine, Base, connection, Order, Media, OrderS
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.config.shemas import OrderSCH
 from typing import List
+from app.config.config import MEDIA_FOLDER
+import os
 
 
 @connection
@@ -20,11 +22,9 @@ async def post_data(session:AsyncSession, tag:str, files:list):
         order = Order(order_name=tag, medias=files)
         session.add(order)
         await session.commit()
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error insert data",
-        )
+    except Exception as e:
+        print(e)
+
 
 @connection
 async def post_data_id(session:AsyncSession, id:int, files:list) -> None:
@@ -34,17 +34,10 @@ async def post_data_id(session:AsyncSession, id:int, files:list) -> None:
                                       .options(joinedload(Order.medias))
                                       )
         order = order.unique().scalars().one_or_none()
-        if order.status_order == OrderState.NEW:
-            order.medias = order.medias + files
-        else:
-            order.status_order = OrderState.UPDATED
-            order.medias = order.medias + files
+        order.medias = order.medias + files
         await session.commit()
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error insert data",
-        )
+    except Exception as e:
+        print(e)
 
 
 @connection
@@ -65,11 +58,9 @@ async def get_orders(session:AsyncSession) -> List[OrderSCH]:
                     media_list.append(r)
             i.medias = media_list
         return res
-    except:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error insert data",
-        )
+
+    except Exception as e:
+        print(e)
 
 
 
@@ -98,6 +89,12 @@ async def change_order_status(session:AsyncSession,
                                   )
     order = order.unique().scalars().one_or_none()
     if order is not None:
+        if status_media == 'ACCEPTED':
+            media_list = list()
+            for r in order.medias:
+                if r.status == 'NEW':
+                    media_list.append(r)
+            await delete_media(files=media_list)
         if status_order and status_media is not None:
             order.status_media = status_media
             for i in order.medias:
@@ -109,6 +106,18 @@ async def change_order_status(session:AsyncSession,
             order.status_media = status_media
             for i in order.medias:
                 i.status = status_media
+
     await session.commit()
     return order
+
+
+async def delete_media(files : list):
+    try:
+        for file in files:
+            file_path = os.path.join(MEDIA_FOLDER, file.link)
+            os.remove(file_path)
+
+    except Exception as e:
+            print(e)
+
 

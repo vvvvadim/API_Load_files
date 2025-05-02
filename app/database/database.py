@@ -5,22 +5,18 @@ from sqlalchemy import Integer, func,ForeignKey, text
 from typing import List
 import enum
 
-# DATABASE_URL = "mysql+asyncmy://app-dnd:Pwd123@192.168.150.15/call-back"
+
 DATABASE_URL = "sqlite+aiosqlite:///apidb.db"
-# engine = create_async_engine(DATABASE_URL,echo=True,pool_size=20, max_overflow=0,pool_recycle=28799)
 engine = create_async_engine(url=DATABASE_URL,echo=True)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 session = async_session_maker()
 
 class MediaState(str, enum.Enum):
-    RECEIVED = "RECEIVED"
     ACCEPTED = "ACCEPTED"
     NEW = "NEW"
 
 class OrderState(str, enum.Enum):
     NEW = "NEW"
-    RECEIVED = "RECEIVED"
-    UPDATED = "UPDATED"
     CLOSED = "CLOSED"
 
 
@@ -37,8 +33,6 @@ class Base(AsyncAttrs, DeclarativeBase):
 
 class Order(Base):
     order_name : Mapped[str] = mapped_column(nullable=False)
-    # status_media : Mapped[str] = mapped_column(nullable=True)
-    # status_order : Mapped[str] = mapped_column(nullable=True)
     status_media : Mapped[str] = mapped_column(default=OrderState.NEW, server_default=text("'NEW'"))
     status_order : Mapped[str] = mapped_column(default=MediaState.NEW, server_default=text("'NEW'"))
     medias :  Mapped[List["Media"]] = relationship(backref="media", cascade="all,delete")
