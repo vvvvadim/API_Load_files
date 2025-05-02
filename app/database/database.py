@@ -4,10 +4,9 @@ from datetime import datetime
 from sqlalchemy import Integer, func,ForeignKey, text
 from typing import List
 import enum
+from app.config.config import DB_FOLDER
 
-# DATABASE_URL = "mysql+asyncmy://app-dnd:Pwd123@192.168.150.15/call-back"
-DATABASE_URL = "sqlite+aiosqlite:///apidb.db"
-# engine = create_async_engine(DATABASE_URL,echo=True,pool_size=20, max_overflow=0,pool_recycle=28799)
+DATABASE_URL = f"sqlite+aiosqlite:///{DB_FOLDER}/apidb.db"
 engine = create_async_engine(url=DATABASE_URL,echo=True)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 session = async_session_maker()
