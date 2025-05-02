@@ -12,14 +12,11 @@ async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 session = async_session_maker()
 
 class MediaState(str, enum.Enum):
-    RECEIVED = "RECEIVED"
     ACCEPTED = "ACCEPTED"
     NEW = "NEW"
 
 class OrderState(str, enum.Enum):
     NEW = "NEW"
-    RECEIVED = "RECEIVED"
-    UPDATED = "UPDATED"
     CLOSED = "CLOSED"
 
 
@@ -36,8 +33,6 @@ class Base(AsyncAttrs, DeclarativeBase):
 
 class Order(Base):
     order_name : Mapped[str] = mapped_column(nullable=False)
-    # status_media : Mapped[str] = mapped_column(nullable=True)
-    # status_order : Mapped[str] = mapped_column(nullable=True)
     status_media : Mapped[str] = mapped_column(default=OrderState.NEW, server_default=text("'NEW'"))
     status_order : Mapped[str] = mapped_column(default=MediaState.NEW, server_default=text("'NEW'"))
     medias :  Mapped[List["Media"]] = relationship(backref="media", cascade="all,delete")

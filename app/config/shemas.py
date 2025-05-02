@@ -9,8 +9,6 @@ class MediaSCH(BaseModel):
     id : int
     link : str
     status : str | None
-    # created_at: datetime
-    # updated_at: datetime
     _created_at : datetime = PrivateAttr()
     _updated_at : datetime = PrivateAttr()
 
@@ -21,8 +19,6 @@ class OrderSCH(BaseModel):
     status_media : str | None
     status_order : str | None
     medias : List[MediaSCH] | None
-    # created_at: datetime
-    # updated_at: datetime
     _created_at : datetime = PrivateAttr()
     _updated_at : datetime = PrivateAttr()
 
