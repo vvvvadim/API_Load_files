@@ -24,9 +24,10 @@ async def order_get():
                    description="Изменение статуса обработки фотоматериалов заказ-нарядов",
                    name="Изменение данных"
                    )
-
+# async def order_post(tag : str, status_media:str = None, status_order: str = None):
 async def order_post(input_m:OrderStatus):
     res = await change_order_status(tag=input_m.tag, status_media=input_m.status_media, status_order=input_m.status_order)
+    # res = await change_order_status(tag=tag, status_media=status_media, status_order=status_order)
     if res is None:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
