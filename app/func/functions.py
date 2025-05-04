@@ -83,31 +83,39 @@ async def change_order_status(session:AsyncSession,
                                   )
     order = order.unique().scalars().one_or_none()
     if order is not None:
-        if status_media == 'ACCEPTED':
-            media_list = list()
-            for r in order.medias:
-                if r.status == 'NEW':
-                    media_list.append(r)
-            await delete_media(files=media_list)
         if status_order and status_media is not None:
-            order.status_media = status_media
-            for i in order.medias:
-                i.status = status_media
-            order.status_order = status_order
+            order = await set_status_order(order=order, status_ord=status_order)
+            order = await set_status_media(order=order, status_m=status_media)
         elif status_order is not None:
-            order.status_order = status_order
+            order = await set_status_order(order=order, status_ord=status_order)
         elif status_media is not None:
-            order.status_media = status_media
-            for i in order.medias:
-                i.status = status_media
+            order = await set_status_media(order=order, status_m=status_media)
     await session.commit()
+    return order
+
+
+async def set_status_order(order:OrderSCH, status_ord:str) -> OrderSCH :
+    order.status_order = status_ord
+    if order.status_order == 'CLOSED':
+        order = await set_status_media(order=order, status_m='ACCEPTED')
+    return order
+
+async def set_status_media(order:OrderSCH, status_m:str) -> OrderSCH :
+    if status_m == 'ACCEPTED':
+        media_list = list()
+        for r in order.medias:
+            if r.status == 'NEW':
+                media_list.append(r.link)
+                r.status = status_m
+        await delete_media(files=media_list)
+    order.status_media = status_m
     return order
 
 
 async def delete_media(files : list):
     try:
         for file in files:
-            file_path = os.path.join(MEDIA_FOLDER, file.link)
+            file_path = os.path.join(MEDIA_FOLDER, file)
             os.remove(file_path)
 
     except Exception as e:
