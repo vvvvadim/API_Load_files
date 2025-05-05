@@ -1,7 +1,6 @@
-from fastapi import HTTPException,status
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload, selectinload
-from app.database.database import engine, Base, connection, Order, Media, OrderState
+from app.database.database import engine, Base, connection, Order, Media
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.config.shemas import OrderSCH
 from typing import List
@@ -10,7 +9,7 @@ import os
 
 
 @connection
-async def get_order(session:AsyncSession,tag:str) -> OrderSCH:
+async def get_order(session:AsyncSession,tag:str) -> OrderSCH | None:
     res = await session.execute(select(Order).where(Order.order_name == tag))
     res = res.scalar_one_or_none()
     return res
@@ -26,10 +25,10 @@ async def post_data(session:AsyncSession, tag:str, files:list):
         print(e)
 
 @connection
-async def post_data_id(session:AsyncSession, id:int, files:list) -> None:
+async def post_data_id(session:AsyncSession, ord_id:int, files:list) -> None:
     try:
         order = await session.execute(select(Order)
-                                      .filter(Order.id == id)
+                                      .filter(Order.id == ord_id)
                                       .options(joinedload(Order.medias))
                                       )
         order = order.unique().scalars().one_or_none()
@@ -40,7 +39,7 @@ async def post_data_id(session:AsyncSession, id:int, files:list) -> None:
 
 
 @connection
-async def get_orders(session:AsyncSession) -> List[OrderSCH]:
+async def get_orders(session:AsyncSession) -> List[OrderSCH] | None:
     try:
         res = await session.execute(select(Order)
                                     .filter(Order.status_order == 'NEW' )

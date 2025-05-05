@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.routes import media, orders
 from fastapi.staticfiles import StaticFiles
+from app.config.config import MEDIA_FOLDER
 import os
 
 from contextlib import asynccontextmanager
@@ -19,7 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan,debug=True)
 
-app.mount("/media",StaticFiles(directory='/'.join(os.getcwd().split('/')[:-1])+'/media'),name="static")
+app.mount("/media",StaticFiles(directory=MEDIA_FOLDER),name="static")
 
 app.include_router(media.api_router)
 app.include_router(orders.order_router)

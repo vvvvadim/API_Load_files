@@ -45,7 +45,7 @@ async def upload_file(tag : Annotated[str, Form()], files: list[UploadFile], req
         if order is None:
             await post_data(tag=tag, files=media)
         else:
-            await post_data_id(id=order.id, files=media)
+            await post_data_id(ord_id=order.id, files=media)
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

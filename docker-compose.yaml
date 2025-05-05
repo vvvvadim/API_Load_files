@@ -1,0 +1,44 @@
+services:
+  api:
+    container_name: api
+    build:
+      context: ./app/.
+      dockerfile: Dockerfile
+    command: fastapi run
+    volumes:
+      - db:/app/db
+      - media:/app/media
+    networks:
+      - project_network
+    ports:
+      - 8000:8000
+
+  server:
+    container_name: nginx
+    build:
+      context: ./server-nginx/.
+      dockerfile: Dockerfile
+    volumes:
+      - media:/usr/share/nginx/html/media
+    depends_on:
+      - api
+    networks:
+      - project_network
+    ports:
+      - 8080:8080
+
+volumes:
+  db:
+    driver_opts:
+      type: none
+      device: ./db
+      o: bind
+  media:
+    driver_opts:
+      type: none
+      device: ./media
+      o: bind
+
+networks:
+  project_network:
+    driver: bridge
