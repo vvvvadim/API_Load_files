@@ -3,7 +3,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
 from app.func.functions import delete_data,post_data, get_order,post_data_id
-from app.config.config import MEDIA_FOLDER
+from app.config.config import MEDIA_FOLDER, CURRENT_URL
 import os
 import uuid
 import datetime
@@ -32,9 +32,7 @@ async def upload_file(tag : Annotated[str, Form()], files: list[UploadFile], req
     try:
         order = await get_order(tag=tag)
         if len(files) == 1 and files[0].size == 0:
-            current_url1 = '/'.join(str(request.url).split('/')[:-1])+'/'+tag
-            print(current_url1)
-            current_url = 'https://file.dveri-baza.ru:6443/'+tag
+            current_url = CURRENT_URL+tag
             return RedirectResponse(url=current_url, status_code=303)
         else:
             for file in files:
