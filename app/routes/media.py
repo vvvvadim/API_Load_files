@@ -21,7 +21,7 @@ async def main_func(tag:str,request:Request):
         return templates.TemplateResponse(name='index1.html', context={'request': request, 'tag': tag })
     else:
         if check.status_order =='NEW':
-            return templates.TemplateResponse(name='index1.html', context={'request': request, 'tag': tag})
+            return templates.TemplateResponse(name='index3.html', context={'request': request, 'tag': tag, 'media': check.medias })
         else:
             return templates.TemplateResponse(name='status.html', context={'request': request, 'tag': tag})
 

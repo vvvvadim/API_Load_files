@@ -10,8 +10,11 @@ import os
 
 @connection
 async def get_order(session:AsyncSession,tag:str) -> OrderSCH | None:
-    res = await session.execute(select(Order).where(Order.order_name == tag))
-    res = res.scalar_one_or_none()
+    res = await session.execute(select(Order)
+                                .where(Order.order_name == tag)
+                                .options(joinedload(Order.medias)
+                                         ))
+    res = res.unique().scalar_one_or_none()
     return res
 
 
