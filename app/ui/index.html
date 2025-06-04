@@ -1,20 +1,223 @@
 <!DOCTYPE html>
 <html>
- <head>
+<head>
   <link rel="icon" href="data:;base64,=">
   <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Загрузка файлов</title>
- </head>
- <body>
-<h2>ID: {{tag}} </h2>
-  <form action="/upload" enctype="multipart/form-data" method="post">
-       <p>
-        Tag: <br>
-        <input name="tag" type="text" value={{tag}} />
-       </p>
-   <p>Загрузите ваши фотографии на сервер</p>
-   <p><input type="file" name="files" multiple accept="image/*,image/jpeg">
-   <input type="submit" value="Отправить"></p>
-  </form>
- </body>
+<style>
+@import 'https://fonts.googleapis.com/css?family=Open+Sans+Condensed:600';
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+div[class*=box] {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box-1 { 
+  background-color: #FF6766;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+}
+
+.file-status {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.file-list {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-size: 1em;
+  margin-top: 10px;
+  text-align: center;
+}
+
+input[type="file"] {
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+}
+
+input[type="file"]::file-selector-button {
+  border: 4px solid #6c5ce7;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 2.4em;
+  background-color: #a29bfe;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  font-family: 'Open Sans Condensed', sans-serif !important;
+  color: white !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 400;
+}
+
+/* Добавляем стили для разных браузеров */
+input[type="file"]::-webkit-file-upload-button {
+  border: 4px solid #6c5ce7;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 2.4em;
+  background-color: #a29bfe;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  font-family: 'Open Sans Condensed', sans-serif !important;
+  color: white !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 400;
+}
+
+input[type="file"]::-moz-focus-inner {
+  border: 0;
+}
+
+input[type="file"]::-ms-browse {
+  border: 4px solid #6c5ce7;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 2.4em;
+  background-color: #a29bfe;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  font-family: 'Open Sans Condensed', sans-serif !important;
+  color: white !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 400;
+}
+
+input[type=submit] {
+  border: 4px solid #6c5ce7;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 1.2em;
+  background-color: #a29bfe;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+input[type=submit]:hover {
+  background-color: #81ecec;
+  border-color: #00cec9;
+}
+
+label {
+  font-size: 1.5em;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+p {
+  margin: 0;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-size: 1.5em;
+  text-align: center;
+}
+
+p:last-of-type {
+  margin-top: 40px;
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  input[type="file"]::file-selector-button,
+  input[type=submit] {
+    padding: 12px 24px;
+    font-size: 1.5em;
+    width: 100%;
+  }
+  
+  .file-status, .file-list {
+    font-size: 1em;
+  }
+  
+  label, p {
+    font-size: 1.2em;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="box-1">
+    <div class="form-container">
+      <form action="/upload" enctype="multipart/form-data" method="post">
+        <input name="tag" type="hidden" value={{tag}} />
+        <p>Номер заказ-наряда:</p>
+        <p>{{tag}}</p>
+        <label for="fileUpload">Выберите фотографии для загрузки</label>
+        <div class="file-status">Файлы не выбраны</div>
+        <div class="file-list"></div>
+        <p><input type="file" id="fileUpload" name="files" multiple accept="image/*,image/jpeg" onchange="updateFileStatus(this)"/></p>
+        <p><input type="submit" value="Отправить"></p>
+      </form>
+    </div>
+  </div>
+
+<script>
+function updateFileStatus(input) {
+  const fileStatus = document.querySelector('.file-status');
+  const fileList = document.querySelector('.file-list');
+  
+  if (input.files.length > 0) {
+    fileStatus.textContent = 'Выбранные файлы:';
+    fileList.innerHTML = Array.from(input.files)
+      .map(file => file.name)
+      .join('<br>');
+  } else {
+    fileStatus.textContent = 'Файлы не выбраны';
+    fileList.innerHTML = '';
+  }
+}
+</script>
+</body>
 </html>
