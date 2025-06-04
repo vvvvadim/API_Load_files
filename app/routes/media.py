@@ -8,11 +8,29 @@ import os
 import uuid
 import datetime
 import aiofiles
+from PIL import Image
+import io
 from typing import Annotated
 from app.database.database import Media
 
 api_router = APIRouter(tags=["Загрузка файлов"])
 templates = Jinja2Templates(directory=os.path.abspath(os.path.expanduser('ui')))
+
+def compress_image(image: Image.Image, max_size: tuple = (1920, 1080), quality: int = 85) -> bytes:
+    """
+    Сжимает изображение до указанного размера и качества
+    :param image: Исходное изображение
+    :param max_size: Максимальные размеры (ширина, высота)
+    :param quality: Качество JPEG (1-100)
+    :return: Сжатое изображение в байтах
+    """
+    # Изменяем размер, сохраняя пропорции
+    image.thumbnail(max_size, Image.Resampling.LANCZOS)
+    
+    # Конвертируем в байты
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='JPEG', quality=quality, optimize=True)
+    return img_byte_arr.getvalue()
 
 @api_router.get("/{tag}", name="main_route")
 async def main_func(tag:str,request:Request):
@@ -43,9 +61,11 @@ async def upload_file(tag : Annotated[str, Form()], files: list[UploadFile], req
                            + '.'.join(file.filename.split('.')[-1:]))
                 file.filename = file_id
                 contents = await file.read()
+                image = Image.open(io.BytesIO(contents))
+                compressed_contents = compress_image(image)
                 path = os.path.join(MEDIA_FOLDER, file.filename)
                 async with aiofiles.open(path, 'wb') as f:
-                    await f.write(contents)
+                    await f.write(compressed_contents)
                     await file.close()
             media = [Media(link=i.filename) for i in files]
             if order is None:
