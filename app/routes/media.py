@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile,HTTPException, status,Form,Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
-from app.func.functions import delete_data,post_data, get_order,post_data_id
+from app.func.functions import post_data, get_order,post_data_id
 from app.config.config import MEDIA_FOLDER, CURRENT_URL
 import os
 import uuid
@@ -10,26 +10,62 @@ import datetime
 import aiofiles
 from PIL import Image
 import io
-from typing import Annotated
+from typing import Annotated, Tuple
 from app.database.database import Media
 
 api_router = APIRouter(tags=["Загрузка файлов"])
 templates = Jinja2Templates(directory=os.path.abspath(os.path.expanduser('ui')))
 
-def compress_image(image: Image.Image, max_size: tuple = (1920, 1080), quality: int = 85) -> bytes:
+
+def compress_image(
+        image: Image.Image,
+        max_size: Tuple[int, int] = (1920, 1080),
+        quality: int = 85,
+        format: str = 'JPEG',
+        progressive: bool = True
+) -> bytes:
     """
-    Сжимает изображение до указанного размера и качества
-    :param image: Исходное изображение
-    :param max_size: Максимальные размеры (ширина, высота)
-    :param quality: Качество JPEG (1-100)
-    :return: Сжатое изображение в байтах
+    Оптимизирует и сжимает изображение с сохранением пропорций
+
+    Args:
+        image: Исходное изображение (PIL Image)
+        max_size: Максимальные размеры (ширина, высота) в пикселях
+        quality: Качество сжатия (1-100)
+        format: Формат выходного файла ('JPEG', 'WEBP' и др.)
+        progressive: Использовать прогрессивную загрузку для JPEG
+
+    Returns:
+        Байтовое представление сжатого изображения
+
+    Raises:
+        ValueError: Если параметры некорректны
     """
-    # Изменяем размер, сохраняя пропорции
+    # Проверка параметров
+    if not 1 <= quality <= 100:
+        raise ValueError("Качество должно быть между 1 и 100")
+
+    # Конвертация для форматов, не поддерживающих прозрачность
+    if format in ('JPEG', 'JPG') and image.mode in ('RGBA', 'LA', 'P'):
+        image = image.convert('RGB')
+
+    # Изменение размера с сохранением пропорций
     image.thumbnail(max_size, Image.Resampling.LANCZOS)
-    
-    # Конвертируем в байты
+
+    # Оптимизированное сохранение в байты
     img_byte_arr = io.BytesIO()
-    image.save(img_byte_arr, format='JPEG', quality=quality, optimize=True)
+    save_params = {
+        'format': format,
+        'quality': quality,
+        'optimize': True,
+        'progressive': progressive
+    }
+
+    # Дополнительные параметры для WEBP
+    if format == 'WEBP':
+        save_params['method'] = 6  # Максимальное сжатие
+
+    image.save(img_byte_arr, **save_params)
+
     return img_byte_arr.getvalue()
 
 @api_router.get("/{tag}", name="main_route")
@@ -40,6 +76,8 @@ async def main_func(tag:str,request:Request):
     else:
         if check.status_order =='NEW':
             return templates.TemplateResponse(name='page_with_pic.html', context={'request': request, 'tag': tag, 'media': check.medias })
+        elif check.status_order == 'CLOSED':
+            return templates.TemplateResponse(name='page_gallery.html', context={'request': request, 'tag': tag, 'media': check.medias})
         else:
             return templates.TemplateResponse(name='status.html', context={'request': request, 'tag': tag})
 
@@ -80,13 +118,3 @@ async def upload_file(tag : Annotated[str, Form()], files: list[UploadFile], req
         )
 
     return templates.TemplateResponse(name='final.html',context={'request': request, 'tag': tag })
-
-
-@api_router.get("/api/delete-data",
-                     status_code=status.HTTP_200_OK,
-                     response_model=None,
-                     description="Очистка базы данных",
-                     name="Очистка базы данных")
-async def delete_alldata():
-    res = await delete_data()
-    return res

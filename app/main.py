@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from app.routes import media, orders
 from fastapi.staticfiles import StaticFiles
 from app.config.config import MEDIA_FOLDER
-import os
 
 from contextlib import asynccontextmanager
 from app.database.database import engine, session, Base

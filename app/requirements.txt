@@ -21,6 +21,8 @@ click==8.1.7
 click-didyoumean==0.3.1
 click-plugins==1.1.1
 click-repl==0.3.0
+customtkinter==5.2.2
+darkdetect==0.8.0
 dnspython==2.7.0
 email_validator==2.2.0
 fastapi==0.115.5
@@ -55,7 +57,7 @@ mistune==3.0.2
 multidict==6.1.0
 mypy-extensions==1.0.0
 packaging==24.1
-pillow==11.0.0
+pillow==11.2.1
 pluggy==1.5.0
 prometheus_client==0.21.0
 prometheus_flask_exporter==0.23.1
@@ -70,6 +72,7 @@ pytest==8.3.3
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
 python-multipart==0.0.20
+Python_IO==0.3
 pytz==2024.2
 PyYAML==6.0.2
 redis==5.2.0

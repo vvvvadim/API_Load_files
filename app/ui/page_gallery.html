@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="icon" href="data:;base64,=">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Загрузка файлов</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<style>
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow: auto;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+div[class*=box] {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box-1 {
+  background-color: #FF6766;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  min-height: 100vh;
+  padding: 20px 0;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+  margin-bottom: 0;
+}
+
+.file-status {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.file-list {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-size: 1em;
+  margin-top: 10px;
+  text-align: center;
+}
+
+input[type="file"] {
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+}
+
+input[type="file"]::file-selector-button {
+  border: 4px solid #6c5ce7;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 2.4em;
+  background-color: #a29bfe;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: white !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 600;
+}
+
+/* Добавляем стили для разных браузеров */
+input[type="file"]::-webkit-file-upload-button {
+  border: 4px solid #6c5ce7;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 2.4em;
+  background-color: #a29bfe;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: white !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 600;
+}
+
+input[type="file"]::-moz-focus-inner {
+  border: 0;
+}
+
+input[type="file"]::-ms-browse {
+  border: 4px solid #6c5ce7;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 2.4em;
+  background-color: #a29bfe;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: white !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 600;
+}
+
+input[type=submit] {
+  border: 4px solid #6c5ce7;
+  padding: 15px 30px;
+  border-radius: 15px;
+  font-size: 1.2em;
+  background-color: #a29bfe;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+input[type=submit]:hover {
+  background-color: #81ecec;
+  border-color: #00cec9;
+}
+
+label {
+  font-size: 1.5em;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+p {
+  margin: 0;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-size: 1.5em;
+  text-align: center;
+}
+
+p:last-of-type {
+  margin-top: 40px;
+}
+
+/* Remove old table styles */
+.table {
+  display: none;
+}
+
+/* Image grid styles */
+.image-grid {
+  width: 100%;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.image-preview {
+  width: calc(50% - 10px);
+  max-width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.image-preview:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.image-link {
+  color: #FF6766;
+  text-decoration: none;
+  font-size: 0.9em;
+  word-break: break-all;
+}
+
+.image-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .image-preview {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  input[type="file"]::file-selector-button,
+  input[type=submit] {
+    padding: 12px 24px;
+    font-size: 1.5em;
+    width: 100%;
+  }
+  
+  .file-status, .file-list {
+    font-size: 1em;
+  }
+  
+  label, p {
+    font-size: 1.2em;
+  }
+  
+  .image-preview {
+    height: 150px;
+  }
+  
+  .image-container {
+    gap: 10px;
+  }
+}
+
+/* Styles for the modal */
+#imageModal {
+  display: none;
+  position: fixed;
+  z-index: 999999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  overflow: auto;
+}
+
+#imageModal.show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#imageModal .modal-content {
+  margin: 0;
+  display: block;
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#imageModal .close {
+  position: fixed;
+  right: 35px;
+  top: 15px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000000;
+}
+
+#imageModal .close:hover {
+  color: #bbb;
+}
+
+/* Remove old modal styles */
+.modal {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.image-container {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.image-container img:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+</style>
+</head>
+<body>
+  <div class="box-1">
+    <div class="form-container">
+      <p>Фотоматериал по заказ-наряду:</p>
+      <p><b>{{tag}}</b></p>
+      {% if media %}
+      <div class="image-grid">
+        {% for i in range(0, media|length, 2) %}
+          <div class="image-container">
+            <img src="/media/{{ media[i].link }}" alt="Preview" class="image-preview" onclick="openModal('/media/{{ media[i].link }}')">
+            {% if i + 1 < media|length %}
+            <img src="/media/{{ media[i + 1].link }}" alt="Preview" class="image-preview" onclick="openModal('/media/{{ media[i + 1].link }}')">
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+<script>
+// Функция для обновления статуса файлов
+function updateFileStatus(input) {
+    const fileStatus = document.querySelector('.file-status');
+    const fileList = document.querySelector('.file-list');
+    
+    if (input.files.length > 0) {
+        fileStatus.textContent = 'Выбранные файлы:';
+        fileList.innerHTML = Array.from(input.files)
+            .map(file => file.name)
+            .join('<br>');
+    } else {
+        fileStatus.textContent = 'Файлы не выбраны';
+        fileList.innerHTML = '';
+    }
+}
+
+// Функция для открытия модального окна
+function openModal(imgSrc) {
+    console.log('Opening modal with image:', imgSrc);
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    
+    if (!modal || !modalImg) {
+        console.error('Modal elements not found');
+        return;
+    }
+    
+    modalImg.src = imgSrc;
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    console.log('Modal opened');
+}
+
+// Функция для закрытия модального окна
+function closeModal() {
+    console.log('Closing modal');
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+        console.log('Modal closed');
+    }
+}
+
+// Инициализация после загрузки DOM
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing...');
+    
+    // Добавляем обработчик для кнопки закрытия
+    const closeButton = document.querySelector('#imageModal .close');
+    if (closeButton) {
+        console.log('Adding close button handler');
+        closeButton.addEventListener('click', closeModal);
+    }
+    
+    // Добавляем обработчик клика вне изображения
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        console.log('Adding modal background click handler');
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
+    
+    // Добавляем обработчик клавиши Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+    
+    console.log('Initialization complete');
+});
+</script>
+
+<!-- Модальное окно -->
+<div id="imageModal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
+</body>
+</html>

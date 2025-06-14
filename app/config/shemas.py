@@ -2,8 +2,8 @@ from pydantic import BaseModel, PrivateAttr, field_validator
 from typing import List, Optional
 from datetime import datetime
 
-status_media_list=["NEW", "ACCEPTED"]
-state_status_order=["CLOSED", "NEW"]
+status_media_list=["NEW", "ACCEPTED", "DELETED"]
+state_status_order=["CLOSED", "NEW", "DELETED"]
 
 class MediaSCH(BaseModel):
     id : int
@@ -31,13 +31,13 @@ class OrderStatus(BaseModel):
     @field_validator('status_media')
     def check_status_media(cls,value):
         if value not in status_media_list:
-            raise  ValueError('status_media может быть только NEW или ACCEPTED')
+            raise  ValueError('status_media может быть только NEW, ACCEPTED или DELETED')
         return value
 
     @field_validator('status_order')
     def check_status_order(cls,value):
         if value not in state_status_order:
-            raise  ValueError('status_order может быть только NEW или CLOSED')
+            raise  ValueError('status_order может быть только NEW, CLOSED или DELETED')
         return value
 
 

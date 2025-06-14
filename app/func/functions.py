@@ -63,17 +63,6 @@ async def get_orders(session:AsyncSession) -> List[OrderSCH] | None:
         print(e)
 
 
-
-async def delete_data():
-    try:
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.drop_all)
-            await conn.run_sync(Base.metadata.create_all)
-        return {"result": "true"}
-    except Exception as e:
-        print(e)
-
-
 @connection
 async def change_order_status(session:AsyncSession,
                               tag : str,
@@ -100,6 +89,8 @@ async def set_status_order(order:OrderSCH, status_ord:str) -> OrderSCH :
     order.status_order = status_ord
     if order.status_order == 'CLOSED':
         order = await set_status_media(order=order, status_m='ACCEPTED')
+    elif order.status_order == 'DELETED':
+        order = await set_status_media(order=order, status_m='DELETED')
     return order
 
 async def set_status_media(order:OrderSCH, status_m:str) -> OrderSCH :
@@ -109,6 +100,11 @@ async def set_status_media(order:OrderSCH, status_m:str) -> OrderSCH :
             if r.status == 'NEW':
                 media_list.append(r.link)
                 r.status = status_m
+    elif status_m == 'DELETED':
+        media_list = list()
+        for r in order.medias:
+            media_list.append(r.link)
+            r.status = status_m
         await delete_media(files=media_list)
     order.status_media = status_m
     return order
