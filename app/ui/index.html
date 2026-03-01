@@ -191,13 +191,14 @@ p:last-of-type {
   <div class="box-1">
     <div class="form-container">
       <form action="/upload" enctype="multipart/form-data" method="post">
-        <input name="tag" type="hidden" value={{tag}} />
+        <input name="tag" type="hidden" value={{tag|e}} />
         <p>Номер заказ-наряда:</p>
         <p>{{tag}}</p>
         <label for="fileUpload">Выберите фотографии для загрузки</label>
         <div class="file-status">Файлы не выбраны</div>
         <div class="file-list"></div>
-        <p><input type="file" id="fileUpload" name="files" multiple accept="image/*,image/jpeg" onchange="updateFileStatus(this)"/></p>
+        <p><input type="file" id="fileUpload" name="files" multiple accept="image/*,image/jpeg,image/png,image/gif,video/*"
+                  onchange="updateFileStatus(this)"/></p>
         <p><input type="submit" value="Отправить"></p>
       </form>
     </div>

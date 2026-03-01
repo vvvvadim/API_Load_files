@@ -1,463 +1,640 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" href="data:;base64,=">
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Загрузка файлов</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="icon" href="data:;base64,=">
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка файлов</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<style>
-html, body {
-  width: 100%;
-  min-height: 100%;
-  overflow: auto;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
+    <style>
+        html, body {
+          width: 100%;
+          min-height: 100%;
+          overflow: auto;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          flex-wrap: wrap;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
 
-div[class*=box] {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+        div[class*=box] {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
 
-.box-1 {
-  background-color: #FF6766;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  min-height: 100vh;
-  padding: 20px 0;
-}
+        .box-1 {
+          background-color: #FF6766;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+          min-height: 100vh;
+          padding: 20px 0;
+        }
 
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 600px;
-  margin-bottom: 0;
-}
+        .form-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 40px;
+          background-color: rgba(255, 255, 255, 0.1);
+          padding: 20px;
+          border-radius: 20px;
+          width: 90%;
+          max-width: 600px;
+          margin-bottom: 0;
+        }
 
-.file-status {
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  text-align: center;
-}
+        .file-status {
+          color: white;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-size: 1.2em;
+          margin-bottom: 10px;
+          text-align: center;
+        }
 
-.file-list {
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  font-size: 1em;
-  margin-top: 10px;
-  text-align: center;
-}
+        .file-list {
+          color: white;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-size: 1em;
+          margin-top: 10px;
+          text-align: center;
+        }
 
-input[type="file"] {
-  width: 100%;
-  max-width: 400px;
-  margin: 10px 0;
-}
+        input[type="file"] {
+          width: 100%;
+          max-width: 400px;
+          margin: 10px 0;
+        }
 
-input[type="file"]::file-selector-button {
-  border: 4px solid #6c5ce7;
-  padding: 15px 30px;
-  border-radius: 15px;
-  font-size: 2.4em;
-  background-color: #a29bfe;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: white !important;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  font-weight: 600;
-}
+        input[type="file"]::file-selector-button {
+          border: 4px solid #6c5ce7;
+          padding: 15px 30px;
+          border-radius: 15px;
+          font-size: 2.4em;
+          background-color: #a29bfe;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          width: 100%;
+          max-width: 400px;
+          margin-bottom: 10px;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+          color: white !important;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-weight: 600;
+        }
 
-/* Добавляем стили для разных браузеров */
-input[type="file"]::-webkit-file-upload-button {
-  border: 4px solid #6c5ce7;
-  padding: 15px 30px;
-  border-radius: 15px;
-  font-size: 2.4em;
-  background-color: #a29bfe;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: white !important;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  font-weight: 600;
-}
+        input[type="file"]::-webkit-file-upload-button {
+          border: 4px solid #6c5ce7;
+          padding: 15px 30px;
+          border-radius: 15px;
+          font-size: 2.4em;
+          background-color: #a29bfe;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          width: 100%;
+          max-width: 400px;
+          margin-bottom: 10px;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+          color: white !important;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-weight: 600;
+        }
 
-input[type="file"]::-moz-focus-inner {
-  border: 0;
-}
+        input[type="file"]::-moz-focus-inner {
+          border: 0;
+        }
 
-input[type="file"]::-ms-browse {
-  border: 4px solid #6c5ce7;
-  padding: 15px 30px;
-  border-radius: 15px;
-  font-size: 2.4em;
-  background-color: #a29bfe;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: white !important;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  font-weight: 600;
-}
+        input[type="file"]::-ms-browse {
+          border: 4px solid #6c5ce7;
+          padding: 15px 30px;
+          border-radius: 15px;
+          font-size: 2.4em;
+          background-color: #a29bfe;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          width: 100%;
+          max-width: 400px;
+          margin-bottom: 10px;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+          color: white !important;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-weight: 600;
+        }
 
-input[type=submit] {
-  border: 4px solid #6c5ce7;
-  padding: 15px 30px;
-  border-radius: 15px;
-  font-size: 1.2em;
-  background-color: #a29bfe;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 400px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
+        input[type=submit] {
+          border: 4px solid #6c5ce7;
+          padding: 15px 30px;
+          border-radius: 15px;
+          font-size: 1.2em;
+          background-color: #a29bfe;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          width: 100%;
+          max-width: 400px;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+          color: white;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
 
-input[type=submit]:hover {
-  background-color: #81ecec;
-  border-color: #00cec9;
-}
+        input[type=submit]:hover {
+          background-color: #81ecec;
+          border-color: #00cec9;
+        }
 
-label {
-  font-size: 1.5em;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  text-align: center;
-}
+        label {
+          font-size: 1.5em;
+          color: white;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          text-align: center;
+        }
 
-p {
-  margin: 0;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  font-size: 1.5em;
-  text-align: center;
-}
+        p {
+          margin: 0;
+          color: white;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-size: 1.5em;
+          text-align: center;
+        }
 
-p:last-of-type {
-  margin-top: 40px;
-}
+        p:last-of-type {
+          margin-top: 40px;
+        }
 
-/* Remove old table styles */
-.table {
-  display: none;
-}
+        .table {
+          display: none;
+        }
 
-/* Image grid styles */
-.image-grid {
-  width: 100%;
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
+        /* Image grid styles */
+        .image-grid {
+          width: 100%;
+          margin-top: 30px;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
 
-.image-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  width: 100%;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
+        .image-container {
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          width: 100%;
+          margin-bottom: 0;
+          padding-bottom: 0;
+          flex-wrap: wrap;
+        }
 
-.image-preview {
-  width: calc(50% - 10px);
-  max-width: 300px;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
+        .image-preview {
+          width: calc(50% - 10px);
+          max-width: 300px;
+          height: 300px;
+          object-fit: cover;
+          border-radius: 12px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
 
-.image-preview:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}
+        .video-preview {
+          position: relative;
+          width: calc(50% - 10px);
+          max-width: 300px;
+          height: 300px;
+          border-radius: 12px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          transition: all 0.3s ease;
+          cursor: pointer;
+          overflow: hidden;
+          background-color: #2d3436;
+        }
 
-.image-link {
-  color: #FF6766;
-  text-decoration: none;
-  font-size: 0.9em;
-  word-break: break-all;
-}
+        .video-preview:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
 
-.image-link:hover {
-  text-decoration: underline;
-}
+        .video-thumbnail {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 12px;
+        }
 
-@media (max-width: 768px) {
-  .image-preview {
-    height: 200px;
-  }
-}
+        .video-play-icon {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 60px;
+          height: 60px;
+          background-color: rgba(0, 0, 0, 0.7);
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: white;
+          font-size: 24px;
+          pointer-events: none;
+          border: 2px solid white;
+          z-index: 2;
+        }
 
-@media (max-width: 480px) {
-  .form-container {
-    padding: 15px;
-    gap: 15px;
-  }
-  
-  input[type="file"]::file-selector-button,
-  input[type=submit] {
-    padding: 12px 24px;
-    font-size: 1.5em;
-    width: 100%;
-  }
-  
-  .file-status, .file-list {
-    font-size: 1em;
-  }
-  
-  label, p {
-    font-size: 1.2em;
-  }
-  
-  .image-preview {
-    height: 150px;
-  }
-  
-  .image-container {
-    gap: 10px;
-  }
-}
+        .video-play-icon::after {
+          content: '▶';
+          margin-left: 4px;
+        }
 
-/* Styles for the modal */
-#imageModal {
-  display: none;
-  position: fixed;
-  z-index: 999999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  overflow: auto;
-}
+        .video-loading {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: white;
+          font-size: 14px;
+          background-color: rgba(0, 0, 0, 0.5);
+          padding: 5px 10px;
+          border-radius: 20px;
+          z-index: 1;
+        }
 
-#imageModal.show {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+        .image-preview:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
 
-#imageModal .modal-content {
-  margin: 0;
-  display: block;
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
+        @media (max-width: 768px) {
+          .image-preview, .video-preview {
+            height: 200px;
+          }
+        }
 
-#imageModal .close {
-  position: fixed;
-  right: 35px;
-  top: 15px;
-  color: #f1f1f1;
-  font-size: 40px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 1000000;
-}
+        @media (max-width: 480px) {
+          .form-container {
+            padding: 15px;
+            gap: 15px;
+          }
 
-#imageModal .close:hover {
-  color: #bbb;
-}
+          input[type="file"]::file-selector-button,
+          input[type=submit] {
+            padding: 12px 24px;
+            font-size: 1.5em;
+            width: 100%;
+          }
 
-/* Remove old modal styles */
-.modal {
-  display: none !important;
-}
+          .file-status, .file-list {
+            font-size: 1em;
+          }
 
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+          label, p {
+            font-size: 1.2em;
+          }
 
-.container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
-}
+          .image-preview, .video-preview {
+            height: 150px;
+          }
 
-.image-container {
-  flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-}
+          .image-container {
+            gap: 10px;
+          }
+        }
 
-.image-container img {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  cursor: pointer;
-}
+        /* Modal styles */
+        #mediaModal {
+          display: none;
+          position: fixed;
+          z-index: 999999;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.9);
+          overflow: auto;
+        }
 
-.image-container img:hover {
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
-}
-</style>
+        #mediaModal.show {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        #mediaModal .modal-content {
+          margin: 0;
+          display: block;
+          max-width: 90%;
+          max-height: 90vh;
+          object-fit: contain;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        #mediaModal .modal-video {
+          max-width: 90vw;
+          max-height: 90vh;
+          width: auto;
+          height: auto;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        #mediaModal .modal-video video {
+          max-width: 90vw;
+          max-height: 90vh;
+          width: auto;
+          height: auto;
+          border-radius: 8px;
+          box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        #mediaModal .close {
+          position: fixed;
+          right: 35px;
+          top: 15px;
+          color: #f1f1f1;
+          font-size: 40px;
+          font-weight: bold;
+          cursor: pointer;
+          z-index: 1000000;
+        }
+
+        #mediaModal .close:hover {
+          color: #bbb;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .container {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          padding: 20px;
+          box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-  <div class="box-1">
+<div class="box-1">
     <div class="form-container">
-      <form action="/upload" enctype="multipart/form-data" method="post">
-        <input name="tag" type="hidden" value={{tag}} />
-        <p>Номер заказ-наряда:</p>
-        <p>{{tag}}</p>
-        <label for="fileUpload">Выберите фотографии для загрузки</label>
-        <div class="file-status">Файлы не выбраны</div>
-        <div class="file-list"></div>
-        <p><input type="file" id="fileUpload" name="files" multiple accept="image/*,image/jpeg" onchange="updateFileStatus(this)"/></p>
-        <p><input type="submit" value="Отправить"></p>
-      </form>
-      
-      {% if media %}
-      <div class="image-grid">
-        {% for i in range(0, media|length, 2) %}
-          <div class="image-container">
-            <img src="/media/{{ media[i].link }}" alt="Preview" class="image-preview" onclick="openModal('/media/{{ media[i].link }}')">
-            {% if i + 1 < media|length %}
-            <img src="/media/{{ media[i + 1].link }}" alt="Preview" class="image-preview" onclick="openModal('/media/{{ media[i + 1].link }}')">
-            {% endif %}
-          </div>
-        {% endfor %}
-      </div>
-      {% endif %}
+        <form action="/upload" enctype="multipart/form-data" method="post">
+            {# Используем safe фильтр и экранируем значение #}
+            <input name="tag" type="hidden" value="{{ tag|e }}"/>
+            <p>Номер заказ-наряда:</p>
+            <p>{{ tag|e }}</p>
+            <label for="fileUpload">Выберите фотографии для загрузки</label>
+            <div class="file-status">Файлы не выбраны</div>
+            <div class="file-list"></div>
+            <p><input type="file" id="fileUpload" name="files" multiple accept="image/*,image/jpeg,image/png,image/gif,video/*"
+                      onchange="updateFileStatus(this)"/></p>
+            <p><input type="submit" value="Отправить"></p>
+        </form>
+
+        {% if photo %}
+        <p>Фотоматериал:</p>
+        <div class="image-grid">
+            {% for i in range(0, photo|length, 2) %}
+            <div class="image-container">
+                <img src="/media/{{ photo[i] }}" alt="Preview" class="image-preview"
+                     onclick="openMediaModal('/media/{{ photo[i] }}', 'image')">
+                {% if i + 1 < photo|length %}
+                <img src="/media/{{ photo[i + 1] }}" alt="Preview" class="image-preview"
+                     onclick="openMediaModal('/media/{{ photo[i + 1] }}', 'image')">
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if video %}
+        <p>Видеоматериал:</p>
+        <div class="image-grid">
+            {% for i in range(0, video|length, 2) %}
+            <div class="image-container">
+                <div class="video-preview" data-video-src="/media/{{ video[i] }}" onclick="openMediaModal('/media/{{ video[i] }}', 'video')">
+                    <video class="video-thumbnail" preload="metadata" muted playsinline style="display: none;"></video>
+                    <canvas class="video-thumbnail" style="display: none;"></canvas>
+                    <img class="video-thumbnail" src="" alt="Loading preview..." style="display: none;">
+                    <div class="video-play-icon"></div>
+                    <div class="video-loading">Загрузка превью...</div>
+                </div>
+
+                {% if i + 1 < video|length %}
+                <div class="video-preview" data-video-src="/media/{{ video[i + 1] }}" onclick="openMediaModal('/media/{{ video[i + 1] }}', 'video')">
+                    <video class="video-thumbnail" preload="metadata" muted playsinline style="display: none;"></video>
+                    <canvas class="video-thumbnail" style="display: none;"></canvas>
+                    <img class="video-thumbnail" src="" alt="Loading preview..." style="display: none;">
+                    <div class="video-play-icon"></div>
+                    <div class="video-loading">Загрузка превью...</div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
-  </div>
+</div>
+
+<!-- Модальное окно для медиафайлов -->
+<div id="mediaModal">
+    <span class="close" onclick="closeMediaModal()">&times;</span>
+    <div class="modal-content" id="modalContent"></div>
+</div>
 
 <script>
-// Функция для обновления статуса файлов
-function updateFileStatus(input) {
-    const fileStatus = document.querySelector('.file-status');
-    const fileList = document.querySelector('.file-list');
-    
-    if (input.files.length > 0) {
-        fileStatus.textContent = 'Выбранные файлы:';
-        fileList.innerHTML = Array.from(input.files)
-            .map(file => file.name)
-            .join('<br>');
-    } else {
-        fileStatus.textContent = 'Файлы не выбраны';
-        fileList.innerHTML = '';
-    }
-}
+    // Функция для обновления статуса файлов
+    function updateFileStatus(input) {
+        const fileStatus = document.querySelector('.file-status');
+        const fileList = document.querySelector('.file-list');
 
-// Функция для открытия модального окна
-function openModal(imgSrc) {
-    console.log('Opening modal with image:', imgSrc);
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImage');
-    
-    if (!modal || !modalImg) {
-        console.error('Modal elements not found');
-        return;
+        if (input.files.length > 0) {
+            fileStatus.textContent = 'Выбранные файлы:';
+            fileList.innerHTML = Array.from(input.files)
+                .map(file => file.name)
+                .join('<br>');
+        } else {
+            fileStatus.textContent = 'Файлы не выбраны';
+            fileList.innerHTML = '';
+        }
     }
-    
-    modalImg.src = imgSrc;
-    modal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-    console.log('Modal opened');
-}
 
-// Функция для закрытия модального окна
-function closeModal() {
-    console.log('Closing modal');
-    const modal = document.getElementById('imageModal');
-    if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = 'auto';
-        console.log('Modal closed');
-    }
-}
+    // Функция для извлечения первого кадра из видео
+    function extractVideoFrame(videoElement, canvasElement, imgElement, loadingElement) {
+        // Устанавливаем время для захвата кадра (0.1 секунда)
+        videoElement.currentTime = 0.1;
 
-// Инициализация после загрузки DOM
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing...');
-    
-    // Добавляем обработчик для кнопки закрытия
-    const closeButton = document.querySelector('#imageModal .close');
-    if (closeButton) {
-        console.log('Adding close button handler');
-        closeButton.addEventListener('click', closeModal);
-    }
-    
-    // Добавляем обработчик клика вне изображения
-    const modal = document.getElementById('imageModal');
-    if (modal) {
-        console.log('Adding modal background click handler');
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeModal();
+        videoElement.addEventListener('seeked', function onSeeked() {
+            // Рисуем кадр на canvas
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+            canvasElement.getContext('2d').drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+            // Конвертируем canvas в data URL и устанавливаем как src изображения
+            try {
+                const frameDataUrl = canvasElement.toDataURL('image/jpeg');
+                imgElement.src = frameDataUrl;
+                imgElement.style.display = 'block';
+
+                // Скрываем loading и показываем изображение
+                loadingElement.style.display = 'none';
+
+                // Очищаем ресурсы
+                videoElement.remove();
+                canvasElement.remove();
+            } catch (e) {
+                console.error('Error capturing video frame:', e);
+                loadingElement.textContent = 'Не удалось загрузить превью';
             }
+
+            // Удаляем обработчик после выполнения
+            videoElement.removeEventListener('seeked', onSeeked);
         });
     }
-    
-    // Добавляем обработчик клавиши Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
-    });
-    
-    console.log('Initialization complete');
-});
-</script>
 
-<!-- Модальное окно -->
-<div id="imageModal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="modalImage">
-</div>
+    // Функция для создания превью для всех видео на странице
+    function createVideoPreviews() {
+        const videoPreviews = document.querySelectorAll('.video-preview');
+
+        videoPreviews.forEach(preview => {
+            const videoSrc = preview.dataset.videoSrc;
+            const loadingElement = preview.querySelector('.video-loading');
+
+            // Создаем скрытые элементы video и canvas
+            const videoElement = preview.querySelector('video.video-thumbnail');
+            const canvasElement = preview.querySelector('canvas.video-thumbnail');
+            const imgElement = preview.querySelector('img.video-thumbnail');
+
+            if (!videoSrc || !videoElement || !canvasElement || !imgElement) return;
+
+            // Устанавливаем источник видео
+            videoElement.src = videoSrc;
+
+            // Обработчик ошибки загрузки видео
+            videoElement.addEventListener('error', function() {
+                console.error('Error loading video:', videoSrc);
+                loadingElement.textContent = 'Ошибка загрузки видео';
+            });
+
+            // Когда метаданные видео загружены, начинаем извлечение кадра
+            videoElement.addEventListener('loadedmetadata', function() {
+                extractVideoFrame(videoElement, canvasElement, imgElement, loadingElement);
+            });
+
+            // Загружаем видео
+            videoElement.load();
+        });
+    }
+
+    // Функция для открытия модального окна с медиа
+    function openMediaModal(mediaSrc, mediaType) {
+        console.log('Opening modal with media:', mediaSrc, 'type:', mediaType);
+        const modal = document.getElementById('mediaModal');
+        const modalContent = document.getElementById('modalContent');
+
+        if (!modal || !modalContent) {
+            console.error('Modal elements not found');
+            return;
+        }
+
+        if (mediaType === 'image') {
+            modalContent.innerHTML = `<img src="${mediaSrc}" class="modal-content" id="modalImage">`;
+        } else if (mediaType === 'video') {
+            // Определяем тип видео по расширению
+            const extension = mediaSrc.split('.').pop().toLowerCase();
+            let mimeType = 'video/mp4'; // по умолчанию
+
+            if (extension === 'webm') {
+                mimeType = 'video/webm';
+            } else if (extension === 'ogg' || extension === 'ogv') {
+                mimeType = 'video/ogg';
+            } else if (extension === 'mov') {
+                mimeType = 'video/quicktime';
+            } else if (extension === 'avi') {
+                mimeType = 'video/x-msvideo';
+            } else if (extension === 'mkv') {
+                mimeType = 'video/x-matroska';
+            }
+
+            modalContent.innerHTML = `
+                <div class="modal-video">
+                    <video controls autoplay>
+                        <source src="${mediaSrc}" type="${mimeType}">
+                        Ваш браузер не поддерживает видео тег.
+                    </video>
+                </div>
+            `;
+        }
+
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        console.log('Modal opened');
+    }
+
+    // Функция для закрытия модального окна
+    function closeMediaModal() {
+        console.log('Closing modal');
+        const modal = document.getElementById('mediaModal');
+        const modalContent = document.getElementById('modalContent');
+
+        if (modal) {
+            modal.classList.remove('show');
+            modalContent.innerHTML = ''; // Очищаем содержимое для остановки видео
+            document.body.style.overflow = 'auto';
+            console.log('Modal closed');
+        }
+    }
+
+    // Инициализация после загрузки DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, initializing...');
+
+        // Добавляем обработчик для кнопки закрытия
+        const closeButton = document.querySelector('#mediaModal .close');
+        if (closeButton) {
+            console.log('Adding close button handler');
+            closeButton.addEventListener('click', closeMediaModal);
+        }
+
+        // Добавляем обработчик клика вне изображения
+        const modal = document.getElementById('mediaModal');
+        if (modal) {
+            console.log('Adding modal background click handler');
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeMediaModal();
+                }
+            });
+        }
+
+        // Добавляем обработчик клавиши Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMediaModal();
+            }
+        });
+
+        // Создаем превью для видео
+        createVideoPreviews();
+
+        console.log('Initialization complete');
+    });
+</script>
 
 </body>
 </html>

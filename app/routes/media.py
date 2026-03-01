@@ -12,6 +12,8 @@ from PIL import Image
 import io
 from typing import Annotated, Tuple
 from app.database.database import Media
+from app.func.functions import check_media
+from ttt import photo_lst
 
 api_router = APIRouter(tags=["Загрузка файлов"])
 templates = Jinja2Templates(directory=os.path.abspath(os.path.expanduser('ui')))
@@ -75,9 +77,15 @@ async def main_func(tag:str,request:Request):
         return templates.TemplateResponse(name='index.html', context={'request': request, 'tag': tag })
     else:
         if check.status_order =='NEW':
-            return templates.TemplateResponse(name='page_with_pic.html', context={'request': request, 'tag': tag, 'media': check.medias })
+            photo_lst = [ i.link for i in check.medias if await check_media(i.link) == 'photo']
+            video_lst = [i.link for i in check.medias if await check_media(i.link) == 'video']
+            return templates.TemplateResponse(name='page_with_pic.html',
+                                              context={'request': request, 'tag': tag, 'photo': photo_lst, 'video': video_lst})
         elif check.status_order == 'CLOSED':
-            return templates.TemplateResponse(name='page_gallery.html', context={'request': request, 'tag': tag, 'media': check.medias})
+            photo_lst = [ i.link for i in check.medias if await check_media(i.link) == 'photo']
+            video_lst = [i.link for i in check.medias if await check_media(i.link) == 'video']
+            return templates.TemplateResponse(name='page_gallery.html',
+                                              context={'request': request, 'tag': tag, 'photo': photo_lst, 'video': video_lst})
         else:
             return templates.TemplateResponse(name='status.html', context={'request': request, 'tag': tag})
 
@@ -98,9 +106,15 @@ async def upload_file(tag : Annotated[str, Form()], files: list[UploadFile], req
                            + '.'
                            + '.'.join(file.filename.split('.')[-1:]))
                 file.filename = file_id
-                contents = await file.read()
-                image = Image.open(io.BytesIO(contents))
-                compressed_contents = compress_image(image)
+                if await check_media(file.filename) == 'photo':
+                    contents = await file.read()
+                    image = Image.open(io.BytesIO(contents))
+                    compressed_contents = compress_image(image)
+                else:
+                      compressed_contents = await file.read()
+                # contents = await file.read()
+                # image = Image.open(io.BytesIO(contents))
+                # compressed_contents = compress_image(image)
                 path = os.path.join(MEDIA_FOLDER, file.filename)
                 async with aiofiles.open(path, 'wb') as f:
                     await f.write(compressed_contents)

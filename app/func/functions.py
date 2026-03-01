@@ -118,3 +118,116 @@ async def delete_media(files : list):
 
     except Exception as e:
             print(e)
+
+
+async def check_media(filename):
+    image_extensions = (
+        '.jpg', '.jpeg', '.jpe', '.jfif',  # JPEG
+        '.png',  # PNG
+        '.gif',  # GIF
+        '.bmp', '.dib',  # BMP
+        '.tif', '.tiff',  # TIFF
+        '.webp',  # WebP
+        '.ico',  # ICO
+        '.svg',  # SVG (векторный)
+        '.heic', '.heif',  # HEIF/HEIC (современные форматы)
+        '.avif',  # AVIF
+        '.jp2', '.j2k', '.jpf', '.jpx', '.jpm',  # JPEG 2000
+        '.pcx',  # PCX
+        '.ppm', '.pgm', '.pbm', '.pnm',  # Netpbm форматы
+        '.blp',  # BLP (Blizzard)
+        '.cur',  # Cursor
+        '.dds',  # DirectDraw Surface
+        '.fli', '.flc',  # FLI/FLC анимация
+        '.fpx',  # FlashPix
+        '.fits',  # FITS
+        '.gd', '.gd2',  # GD
+        '.im',  # IM
+        '.mpeg', '.mpg',  # MPEG
+        '.msp',  # MSP
+        '.palm', '.pdb', '.prc',  # Palm pixmap
+        '.pdf',  # PDF (чтение)
+        '.psd',  # Photoshop
+        '.qoi',  # Quite OK Image
+        '.sgi',  # SGI
+        '.tga',  # TGA
+        '.xbm',  # X BitMap
+        '.xpm'  # X PixMap
+    )
+
+    video_extensions = (
+        # MP4 и производные
+        '.mp4', '.m4v', '.m4p', '.m4b',  # MPEG-4 Part 14
+        '.mpg', '.mpeg', '.mpe', '.mpv', '.m1v', '.m2v', '.mp2', '.m2p',  # MPEG-1/2
+        '.mts', '.m2ts', '.mt2s', '.ts',  # MPEG Transport Stream
+        '.tp', '.trp',  # MPEG Transport Stream (другие)
+        '.vob',  # DVD Video Object
+
+        # AVI и производные
+        '.avi',  # Audio Video Interleave
+
+        # MOV и QuickTime
+        '.mov', '.qt',  # QuickTime Movie
+        '.hdmov',  # HD QuickTime Movie
+
+        # MKV и Matroska
+        '.mkv', '.mk3d', '.mka', '.mks',  # Matroska
+
+        # WebM
+        '.webm',  # WebM
+
+        # Windows Media
+        '.wmv', '.asf',  # Windows Media Video
+
+        # Flash Video
+        '.flv', '.f4v', '.f4p', '.f4a', '.f4b',  # Flash Video
+
+        # 3GP (мобильные)
+        '.3gp', '.3g2', '.3gpp', '.3gpp2',  # 3GPP
+
+        # Ogg
+        '.ogv', '.ogg', '.ogm',  # Ogg Video
+
+        # RealMedia
+        '.rm', '.rmvb', '.ra', '.ram',  # RealMedia
+
+        # Bink Video
+        '.bik', '.bik2', '.bk2',  # Bink Video
+
+        # DivX
+        '.divx',  # DivX
+
+        # MPEG-4 (другие)
+        '.mp4v', '.mpv4', '.m4v',  # MPEG-4 Video
+
+        # MXF (профессиональный)
+        '.mxf',  # Material Exchange Format
+
+        # DVR-MS (Windows Media Center)
+        '.dvr-ms', '.wtv',  # DVR-MS
+
+        # AVCHD
+        '.m2ts', '.mts',  # AVCHD
+
+        # QuickTime (другие)
+        '.qtch', '.qtz',  # QuickTime Components
+
+        # DVD
+        '.ifo', '.vob',  # DVD files
+
+        # XviD
+        '.xvid',  # XviD
+
+        # H.264 / H.265
+        '.h264', '.h265', '.264', '.265',  # Raw H.264/H.265
+        '.hevc',  # HEVC
+
+        # Matroska 3D
+        '.mk3d',  # Matroska 3D
+    )
+    if filename.lower().endswith(image_extensions):
+        return 'photo'
+    elif filename.lower().endswith(video_extensions):
+        return 'video'
+    else:
+        return False
