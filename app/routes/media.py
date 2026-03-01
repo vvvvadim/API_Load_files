@@ -111,9 +111,6 @@ async def upload_file(tag : Annotated[str, Form()], files: list[UploadFile], req
                     compressed_contents = compress_image(image)
                 else:
                       compressed_contents = await file.read()
-                # contents = await file.read()
-                # image = Image.open(io.BytesIO(contents))
-                # compressed_contents = compress_image(image)
                 path = os.path.join(MEDIA_FOLDER, file.filename)
                 async with aiofiles.open(path, 'wb') as f:
                     await f.write(compressed_contents)
