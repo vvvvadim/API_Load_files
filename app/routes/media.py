@@ -13,7 +13,6 @@ import io
 from typing import Annotated, Tuple
 from app.database.database import Media
 from app.func.functions import check_media
-from ttt import photo_lst
 
 api_router = APIRouter(tags=["Загрузка файлов"])
 templates = Jinja2Templates(directory=os.path.abspath(os.path.expanduser('ui')))
